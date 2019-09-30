@@ -8,4 +8,14 @@ f = open('WebPage1.html', 'w+')
 f.write(page.text)
 f.close()
 
-parser = __import__('03_parser_emilyasplund')
+f = open('WebPage1.html', 'r')
+text = f.read()
+
+ingredients = re.findall(r'<span class=\"wprm-recipe-ingredient-name\">(.*?)</span>', text, flags=re.S)
+f = open('ingredients_parsed.txt', 'w+')
+f.write(str(ingredients))
+f.close()
+
+with open('ingredients_parsed.txt', 'r') as f:
+    print (f.read())
+
