@@ -1,0 +1,37 @@
+import re
+from bs4 import BeautifulSoup
+import requests as r
+import time
+
+
+def get_rnlp(filename):
+    url = 'http://reynoldsnlp.com/scrape/' + filename
+    time.sleep(2)
+    newfile = 'scrape/' + filename
+    with open(newfile, 'w+') as file:
+        h = {'User-Agent': 'Emily Asplund: asplund.emily@gmail.com'}
+        file.write(r.get(url, headers=h).text)
+
+
+def get_hrefs(filename):
+    file = 'scrape/' + filename
+    with open(file, 'r') as file:
+        soup = BeautifulSoup(file, 'html.parser')
+        soup = soup.find_all('a')
+        result = re.findall(r'https://reynoldsnlp.com/scrape/(.{,7})', str(soup))
+        return result
+
+
+link_list = ['aa.html']
+done_list = []
+while len(link_list) > 0:
+    item = link_list.pop()
+    if item in done_list:
+        continue
+    else:
+        print (item)
+        get_rnlp(item)
+        result = get_hrefs(item)
+        link_list.extend(result)
+        done_list.append(item)
+        
